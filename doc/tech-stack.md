@@ -1,7 +1,7 @@
-#ESBot Project – Technology Selection
-1. Overview
+# ESBot Project – Technology Selection
+## Overview
 This project implements ESBot as a web-based application to support students in learning and practicing course content.
-2. Technology Stack
+## Technology Stack
 Frontend
 We use React with TypeScript to build a modern, type-safe, and interactive user interface for the chat application.
 Backend
@@ -14,7 +14,7 @@ AI Integration
 We use LangChain to integrate large language models and manage structured conversational workflows.
 Containerization
 We use Docker to containerize the application and ensure consistent development and deployment environments.
-3. Reasoning
+## Reasoning
 React with TypeScript improves code quality and maintainability.
 Python is well-suited for AI-related applications.
 FastAPI is fast, lightweight, and easy to use for building APIs.
@@ -22,7 +22,7 @@ PostgreSQL is a robust and widely used relational database.
 LangChain provides powerful tools for managing LLM interactions.
 Docker ensures portability and simplifies setup across different environments.
 The chosen stack aligns with prior experience and enables efficient development.
-4. Development Organization
+## Development Organization
 Currently, the project is developed individually. Tasks will be expanded and distributed once a team is formed.
-5. Prior Experience
+## Prior Experience
 The selected technologies are based on prior experience with React, TypeScript, and LangChain from previous projects, which allows for faster and more confident development.
