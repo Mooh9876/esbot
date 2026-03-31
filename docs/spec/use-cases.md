@@ -3,9 +3,9 @@
 ![Use Case Diagram](../../assets/UseCases.png)
 
 ## Use Case UC-001
-Use Case ID: UC-001
-Title: Chat with ESBot
-Primary Actor: User
+Use Case ID: UC-001  
+Title: Chat with ESBot  
+Primary Actor: User  
 Stakeholders and Interests:
   - User: Wants to ask questions and receive accurate, contextualized answers to learn and practice course content
   - System Owner: Wants the system to process requests efficiently, provide correct answers, and maintain session data securely
