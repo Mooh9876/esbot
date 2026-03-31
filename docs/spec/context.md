@@ -1,1 +1,1 @@
-![System Context Diagram](../assets/st_scd.png)
+![System Context Diagram](../../assets/st_scd.png)
