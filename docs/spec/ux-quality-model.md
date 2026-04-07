@@ -17,7 +17,7 @@ Compare each response against the predefined template; automatically analyze tex
 
 ## 2. Feedback Quality
 ### ISO 25010 Mapping
-- **Usability** (User Error Protection, Learnability)  
+- **Usability** (User Error Protection, Operability)  
 - **Functional Suitability** (Functional Correctness)  
 ### Quality Criterion
 Responses provide explanations for incorrect answers, highlighting why the answer was wrong and what the correct answer is, following a predefined feedback template  
