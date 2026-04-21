@@ -52,6 +52,8 @@ Die `DATABASE_URL` ist über `.devcontainer/docker-compose.yml` bereits gesetzt,
 
 Tests laufen ohne laufendes PostgreSQL – sie nutzen SQLite in-memory (konfiguriert in `tests/conftest.py`).
 
+### Mit uv (empfohlen)
+
 ```bash
 cd backend
 
@@ -65,6 +67,26 @@ uv run pytest tests/test_smoke.py -v
 uv run pytest --cov=app --cov-report=term-missing
 ```
 
+### Ohne uv (nur Python + pip)
+
+Falls `uv` nicht installiert ist, können die Tests auch direkt mit `pip` und `pytest` ausgeführt werden:
+
+```bash
+cd backend
+
+# Abhängigkeiten installieren
+pip install fastapi uvicorn sqlalchemy psycopg2-binary pydantic-settings alembic python-dotenv pytest pytest-cov httpx
+
+# alle Tests
+python -m pytest tests/ -v
+
+# nur Unit-Tests für ein bestimmtes Entity
+python -m pytest tests/test_message.py -v
+
+# mit Coverage
+python -m pytest tests/ --cov=app --cov-report=term-missing
+```
+
 ---
 
 ## Projektstruktur
@@ -72,12 +94,25 @@ uv run pytest --cov=app --cov-report=term-missing
 ```
 backend/
 ├── app/
-│   ├── config.py      # Konfiguration via Umgebungsvariablen
-│   ├── database.py    # SQLAlchemy Engine, Session, Base
-│   └── main.py        # FastAPI App, /health Endpoint
+│   ├── config.py                 # Konfiguration via Umgebungsvariablen
+│   ├── database.py               # SQLAlchemy Engine, Session, Base
+│   ├── main.py                   # FastAPI App, /health Endpoint
+│   └── models/
+│       ├── user_session.py       # UserSession Entity
+│       ├── message.py            # Message Entity
+│       ├── quiz_request.py       # QuizRequest Entity
+│       ├── quiz_item.py          # QuizItem Entity
+│       ├── submitted_answer.py   # SubmittedAnswer Entity
+│       └── evaluation_result.py  # EvaluationResult Entity
 ├── tests/
-│   ├── conftest.py    # pytest-Fixtures (SQLite in-memory, TestClient)
-│   └── test_smoke.py  # Smoke-Tests
+│   ├── conftest.py               # pytest-Fixtures (SQLite in-memory, TestClient)
+│   ├── test_smoke.py             # Smoke-Tests
+│   ├── test_user_session.py      # Unit-Tests UserSession
+│   ├── test_message.py           # Unit-Tests Message
+│   ├── test_quiz_request.py      # Unit-Tests QuizRequest
+│   ├── test_quiz_item.py         # Unit-Tests QuizItem
+│   ├── test_submitted_answer.py  # Unit-Tests SubmittedAnswer
+│   └── test_evaluation_result.py # Unit-Tests EvaluationResult
 ├── .env.example
 └── pyproject.toml
 ```
