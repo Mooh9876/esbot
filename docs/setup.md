@@ -48,7 +48,7 @@ Die `DATABASE_URL` ist über `.devcontainer/docker-compose.yml` bereits gesetzt,
 
 ---
 
-## Tests ausführen
+## Tests ausführen (Unit Tests)
 
 Tests laufen ohne laufendes PostgreSQL – sie nutzen SQLite in-memory (konfiguriert in `tests/conftest.py`).
 
@@ -86,6 +86,55 @@ python -m pytest tests/test_message.py -v
 # mit Coverage
 python -m pytest tests/ --cov=app --cov-report=term-missing
 ```
+
+---
+
+## BDD Tests (Acceptance Tests)
+
+BDD scenarios are executed using behave and validate user-facing system behavior.
+
+With uv (recommended):
+```
+uv run behave
+```
+
+---
+
+## Full Test Suite (Unit + BDD):
+The full test suite executes both unit tests (pytest) and BDD acceptance tests (behave) in sequence.
+
+This ensures that both backend logic and user-facing behavior are validated together.
+
+### Recommended: Single Command Execution
+
+A dedicated test runner script is provided to execute the full test suite:
+
+```bash
+uv run full_test_suite.py
+```
+
+### Alternative: Direct Execution - Platform-specific variants:
+
+Linux / macOS / Git Bash:
+```bash
+uv run pytest && uv run behave
+```
+
+Windows PowerShell:
+```powershell
+uv run pytest; uv run behave
+```
+
+Windows CMD:
+```cmd
+uv run pytest & uv run behave
+```
+
+Notes:
+- Unit tests are located in backend/tests/
+- BDD tests are located in backend/features/
+- BDD scenarios use mocked AI providers to ensure deterministic execution
+- The full test suite ensures both unit and acceptance tests are executed together
 
 ---
 
