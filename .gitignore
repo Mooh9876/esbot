@@ -65,13 +65,9 @@ $RECYCLE.BIN/
 
 # NFS files
 .nfs*
-
-# Python
 __pycache__/
 *.pyc
 .venv/
-.coverage
-
-# Project-specific
 backend/.env
 .vscode/settings.json
+.coverage

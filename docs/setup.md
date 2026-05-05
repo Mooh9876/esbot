@@ -138,6 +138,39 @@ Notes:
 
 ---
 
+## Static Code Analysis (Local)
+
+### Security Scanner – Bandit
+
+[Bandit](https://bandit.readthedocs.io/) scans the Python source for common security issues (e.g., hardcoded credentials, SQL injection patterns, unsafe use of `subprocess`).
+
+**Install:**
+```bash
+cd backend
+uv add --dev bandit
+```
+
+Or without uv:
+```bash
+pip install bandit
+```
+
+**Run (from the `backend/` directory):**
+```bash
+# Basic scan – text output
+uv run bandit -r app/ -f txt
+
+# Scan with severity filter (medium and above only)
+uv run bandit -r app/ -ll -f txt
+
+# Machine-readable JSON output
+uv run bandit -r app/ -f json -o bandit-report.json
+```
+
+Configuration is stored in `pyproject.toml` under `[tool.bandit]`. The `tests/` and `features/` directories are excluded from the scan; `B101` (assert usage) is skipped globally.
+
+See `docs/spec/static-analysis.md` for justification and impact evaluation.
+
 ## Projektstruktur
 
 ```
