@@ -6,7 +6,7 @@
 **Date (planned / actual):** 2026-05-05 / 2026-05-05  
 **Moderator:** Mohammed Al-otaibi  
 **Author(s):** hse-st-group1  
-**Reviewers:** Mohammed Al-otaibi, Dominic Sehorz, Nils-Konstantin Lutz
+**Reviewers:** Mohammed Al-otaibi, Dominic Sehorz, Nils-Konstantin Lutz, Alen Osmanagic
 
 ---
 
@@ -32,7 +32,7 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 |-------|-------|
 | Review No. | REV-2026-001 |
 | Project | ESBot – Group 1 |
-| Project manager | — |
+| Project manager | Nils-Konstantin Lutz |
 | Quality expert / manager | Dominic Sehorz |
 | Moderator | Mohammed Al-otaibi |
 | Author(s) | hse-st-group1 (GitHub) |
