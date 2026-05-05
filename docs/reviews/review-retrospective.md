@@ -6,6 +6,10 @@
 
 ---
 
+This retrospective reflects on the applied review process (planning, preparation, review, and follow-up) as required by the exercise.
+
+---
+
 ## What Worked Well
 
 The LoF table structure turned out to be more useful than I expected. It forced me to be specific — I couldn't just write "this is confusing", I had to write down the exact file, what the issue is, and how serious it is. That made the findings a lot more actionable.
@@ -18,7 +22,7 @@ The positive observations section was a good addition too. Noting what Group 1 d
 
 ## What Was Difficult
 
-The biggest problem was the async format. I had no way to ask Group 1 whether something was intentional or just not done yet. For F-008 (the REST layer being just a "Hello, World" placeholder) I genuinely wasn't sure if that was a scope decision or something they didn't finish. In a real review you'd just ask in the meeting.
+The biggest problem was the asynchronous review format. I had no way to ask Group 1 whether something was intentional or just not done yet. For F-008 (the REST layer being just a "Hello, World" placeholder) I genuinely wasn't sure if that was a scope decision or something they didn't finish. In a real review you'd just ask in the meeting.
 
 The different tech stack was also a challenge. Group 1 uses Java 21 + Spring Boot and I work with Python + FastAPI. Understanding how Lombok, JPA annotations, and `@ControllerAdvice` work in Spring required some extra reading — probably about 30 extra minutes of context-gathering.
 
