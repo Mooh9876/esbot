@@ -6,32 +6,38 @@
 **Date (planned / actual):** 2026-05-05 / 2026-05-05  
 **Moderator:** Mohammed Al-otaibi  
 **Author(s):** hse-st-group1  
-**Reviewers:** Mohammed Al-otaibi
+**Reviewers:** Mohammed Al-otaibi, Dominic Sehorz
 
 ---
 
 ## 1. General Instructions
 
-I used the technical review process from the course. I chose a technical review over a full inspection because the team is small and time was limited — a proper inspection with multiple formal phases would have been too much overhead here. The review also covered three different artefact types (docs, data model, code), so reading and comparing made more sense than a strict counting process.
+We used the technical review process from the course. As artefacts include code, architecture, and specifications. I chose a technical review over a full inspection because the team is small and time was limited — a proper inspection with multiple formal phases would have been too much overhead here. The review also covered three different artefact types (docs, data model, code), so reading and comparing made more sense than a strict counting process.
 
 No live meeting with Group 1 was possible since we're separate teams. Phases I completed: planning → individual preparation → written findings → this report.
 
 ---
+## 2. Planning Summary (Assignment Requirement)
 
-## 2. Master Plan (MP)
+- Roles assigned: Moderator, reviewers, quality expert
+- Review type: Technical review
+- Scope: Docs, spec, data model, backend, BDD
 
-### 2.1 Masterplan — Header
+---
+## 3. Master Plan (MP)
+
+### 3.1 Masterplan — Header
 
 | Field | Value |
 |-------|-------|
 | Review No. | REV-2026-001 |
 | Project | ESBot – Group 1 |
 | Project manager | — |
-| Quality expert / manager | — |
+| Quality expert / manager | Dominic Sehorz |
 | Moderator | Mohammed Al-otaibi |
 | Author(s) | hse-st-group1 (GitHub) |
 
-### 2.2 Review Objects
+### 3.2 Review Objects
 
 | # | Review objects | Abbr. |
 |---|----------------|-------|
@@ -42,7 +48,7 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 | 5 | `application/backend/src/main/java/hse_st_group1/esbot/` (model + services + controller) | CODE |
 | 6 | `application/backend/src/test/resources/features/` (BDD feature files) | BDD |
 
-### 2.3 Reference Documents
+### 3.3 Reference Documents
 
 | # | Reference documents | Abbr. |
 |---|---------------------|-------|
@@ -50,7 +56,7 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 | 2 | `docs/spec/requirements.md` | REQ |
 | 3 | `docs/spec/spec.md` (auto-generated spec) | SPEC |
 
-### 2.4 Checklists / Scenarios
+### 3.4 Checklists / Scenarios
 
 | # | Checklists / scenarios |
 |---|------------------------|
@@ -60,21 +66,21 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 | 4 | BDD scenario quality: scenarios test meaningful user-facing behaviour, not just stub wiring |
 | 5 | REST API: at least the endpoints claimed in FRs 025–027 are present |
 
-### 2.5 Reviewer Assignment
+### 3.5 Reviewer Assignment
 
 | Reviewer | Scope | Abbr. |
 |----------|-------|-------|
 | 1 | Mohammed Al-otaibi — REQ, SPEC, EB (completeness & consistency) | MA |
-| 2 | [Team member 2] — DM, CODE (model vs data-model, services) | — |
+| 2 | [Dominic Sehorz] — DM, CODE (model vs data-model, services) | — |
 | 3 | [Team member 3] — BDD, CODE (feature files, step definitions) | — |
 
-### 2.6 Kick-off
+### 3.6 Kick-off
 
 | Date / time / location |
 |------------------------|
 | Async review; no live kick-off meeting held. Group 1's README and docs used as context material. |
 
-### 2.7 Individual Preparation
+### 3.7 Individual Preparation
 
 | Individual preparation | Value | Unit |
 |------------------------|-------|------|
@@ -83,13 +89,13 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 | Optimal inspection rate | ~100–150 NLOC/h | NLOC/h |
 | Optimal inspection time | ~1.5–2 h | h |
 
-### 2.8 Review Meeting
+### 3.8 Review Meeting
 
 | Date / time / location |
 |------------------------|
 | Async; findings consolidated and documented directly in this file. |
 
-### 2.9 Additional Milestones
+### 3.9 Additional Milestones
 
 | Milestone | Planned date / time | Actual date / time |
 |-----------|---------------------|--------------------|
@@ -99,7 +105,7 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 
 ---
 
-## 3. List of Findings (LoF)
+## 4. List of Findings (LoF)
 
 Severity scale: **blocking** > **major** > **minor** > **editorial**  
 Types: **defect** (wrong/broken), **question** (unclear, needs clarification), **suggestion** (improvement)  
@@ -126,7 +132,7 @@ Status: **open** (all findings are open at time of this review)
 
 ---
 
-## 4. Data Summary (DS)
+## 5. Data Summary (DS)
 
 | Metric | Value | Notes |
 |--------|-------|-------|
@@ -139,9 +145,9 @@ Status: **open** (all findings are open at time of this review)
 
 ---
 
-## 5. Review Report (RR)
+## 6. Review Report (RR)
 
-### 5.1 Summary
+### 6.1 Summary
 
 I reviewed Group 1's ESBot repository: the description doc, requirements, spec, data model, and the Java backend including BDD feature files. In total I found 16 findings.
 
@@ -149,7 +155,7 @@ The documentation has some clear problems — `requirements.md` and `spec.md` ar
 
 The main issue is the REST layer: the only controller is a `TestController` returning `"Hello, World"` — none of the required API endpoints exist. On top of that the service layer throws `AIServiceUnavailableException` for both AI failures and input validation errors, which is confusing and would cause problems when debugging.
 
-### 5.2 Review Outcome
+### 6.2 Review Outcome
 
 - **Review object state after review:** accepted with required changes
 - **Major risks or themes:**
@@ -158,7 +164,7 @@ The main issue is the REST layer: the only controller is a `TestController` retu
   - `requirements.md` and `spec.md` are out of sync and can't be used together as a test basis
   - One requirement is incomplete (sentence cuts off mid-way in `requirements.md`)
 
-### 5.3 Decisions and Follow-up
+### 6.3 Decisions and Follow-up
 
 | Topic | Decision | Responsible | Due date |
 |-------|----------|-------------|----------|
@@ -168,7 +174,7 @@ The main issue is the REST layer: the only controller is a `TestController` retu
 | F-010, F-011 | Fix case-sensitive topic detection; introduce dedicated validation exception | Group 1 | — |
 | F-012 | Add `@ControllerAdvice` for `AIServiceUnavailableException` → HTTP 503 | Group 1 | — |
 
-### 5.4 Positive Observations
+### 6.4 Positive Observations
 
 - The Java domain model is well structured and closely matches the data model document. JPA cascade relationships are set up correctly.
 - Using `AIService` as a Java interface is a good decision — it makes mocking in tests clean and easy.
@@ -176,12 +182,12 @@ The main issue is the REST layer: the only controller is a `TestController` retu
 - The Cucumber/Spring integration with `CucumberSpringConfig` and a shared `SharedSession` context shows they thought about how to handle state between step definitions.
 - Naming the exception `AIServiceUnavailableException` explicitly instead of just using `RuntimeException` is good practice, even if it ends up being used for the wrong cases too.
 
-### 5.5 Lessons Learned
+### 6.5 Lessons Learned
 
 - Having one clear requirements document — or at least a note saying "this spec extends requirements.md" — would make reviewing a lot easier. The inconsistency between the two files was probably the most confusing part of this review.
 - Fixing feature file naming and test data is fast and low-effort. It makes a real difference when someone else reads the tests for the first time.
 
-### 5.6 Sign-off
+### 6.6 Sign-off
 
 | Role | Name | Signature / date |
 |------|------|------------------|
