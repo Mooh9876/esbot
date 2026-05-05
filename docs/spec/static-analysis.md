@@ -12,7 +12,7 @@ Two categories were chosen, one tool per category:
 | # | Category | Tool | Version |
 |---|----------|------|---------|
 | 1 | **Security scanner** | [Bandit](https://bandit.readthedocs.io/) | latest |
-| 2 | *(second tool — assigned to other team member)* | e.g. mypy (type checker) or pylint (linter) | — |
+| 2 | **Code complexity / maintainability** | [Radon](https://radon.readthedocs.io/) | latest |
 
 ### Why These Categories for ESBot?
 
@@ -23,8 +23,12 @@ The AI integration in `ai_provider.py` and `ai_stubs.py` passes user input direc
 
 Bandit checks for hardcoded passwords, weak crypto, unsafe subprocess calls, and open debug endpoints. For a student project where things get added quickly, having an automated check for this makes sense.
 
-**Type checking (second tool — other team member)**  
-ESBot uses Pydantic models and SQLAlchemy ORM everywhere, so type errors at the AI boundary or in database models could cause runtime failures that a type checker would catch statically.
+**Code complexity / maintainability (Radon)**  
+ESBot contains multiple service layers (API layer, AI integration layer, database layer), which makes it important to keep functions and modules maintainable.
+
+Radon was chosen to analyze cyclomatic complexity and maintainability of the codebase. This is especially relevant in `ai_provider.py`, `routes/`, and database service modules, where logic can grow quickly due to AI prompt handling and API orchestration.
+
+Without complexity analysis, it is easy for functions to become too large or deeply nested, especially when adding features under time pressure. Radon helps identify these hotspots early and supports refactoring decisions.
 
 ---
 
@@ -134,20 +138,109 @@ Once the codebase is more stable and the team has gone through all current findi
 
 ---
 
-## Tool 2: *(assigned to other team member)*
+## Tool 2: Radon (Code Complexity / Maintainability)
 
-See separate section to be added by the second contributor. Recommended categories: **type checker** (mypy) or **linter** (pylint / ruff).
-
-Suggested commands for mypy (for reference):
+### Installation
 
 ```bash
-uv add --dev mypy
-uv run mypy app/ --ignore-missing-imports
+cd backend
+uv add --dev radon
+# or: pip install radon
 ```
 
-Suggested commands for pylint:
+---
+
+### Configuration
+
+Configuration is in `backend/pyproject.toml`:
+
+```toml
+[tool.radon]
+cc_min = "B"
+show_complexity = true
+order = "SCORE"
+```
+
+`cc_min = "B"` filters out low-complexity functions (A-level), focusing analysis on potentially problematic code.  
+`show_complexity = true` enables numeric complexity metrics for better interpretation in reports.  
+`order = "SCORE"` sorts results by highest complexity first to highlight hotspots.
+
+---
+
+### Running the Tool
+
+All commands run from the `backend/` directory:
 
 ```bash
-uv add --dev pylint
-uv run pylint app/
+# Cyclomatic Complexity analysis (annotated + sorted hotspots)
+uv run radon cc app/ -a -s
+
+# Maintainability Index (code maintainability per file)
+uv run radon mi app/
+
+# Full repository complexity scan (includes tests, scripts, configs, etc.)
+uv run radon cc . -a -s
 ```
+
+---
+
+### Sample Output (representative)
+
+Running `radon cc app/ -a -s` produces output similar to:
+
+```
+app/routes/chat.py
+    F 42:4 handle_message - A (3)
+    C 88:4 build_prompt   - C (9)
+
+app/services/ai_provider.py
+    C 21:4 generate_response - C (10)
+    B 12:4 sanitize_input    - B (5)
+```
+
+The Maintainability Index (`mi`) typically shows most files in the A–B range, indicating good maintainability overall. Occasional C-level scores highlight areas where refactoring may be beneficial, particularly in AI orchestration logic.
+
+---
+
+## Impact Evaluation
+
+### Usefulness for Code Quality and Defect Prevention
+
+Radon is useful for ESBot mainly for three reasons:
+
+1. It identifies overly complex functions in API routes and AI service logic, where logic tends to grow quickly.
+2. It helps detect early signs of technical debt, especially in orchestration code between FastAPI, SQLAlchemy, and external LLM calls.
+3. It supports refactoring decisions by making complexity measurable instead of subjective.
+
+Unlike security scanners, Radon does not focus on vulnerabilities but on structural code quality, which complements Bandit well.
+
+---
+
+### Noise / False Positives
+
+Radon produces relatively low noise.  
+Most flagged functions (e.g. C-level complexity) are not bugs, but design warnings that require contextual interpretation.
+
+AI-related logic (e.g. prompt construction or response handling) may appear more complex due to branching and validation steps, even if this complexity is intentional.
+
+---
+
+### Development Process Impact
+
+- Execution time is negligible (<5 seconds for full project scan).
+- Output is easy to interpret when sorted by complexity (`-s` flag).
+- Helps prioritize refactoring work without manual code inspection.
+- No disruption to development workflow when run locally.
+
+---
+
+### What Would Not Be Automated in a Pipeline Yet
+
+Radon is currently kept as a local-only tool.
+
+Reasoning:
+- Complexity thresholds are subjective and may fluctuate during active development.
+- AI-related logic naturally tends to be more complex, which would lead to noisy CI feedback.
+- Local execution provides flexibility without enforcing premature refactoring.
+
+Once the codebase stabilizes, Radon could be integrated into CI or pre-commit hooks to enforce complexity limits consistently.

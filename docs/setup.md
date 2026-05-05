@@ -171,6 +171,62 @@ Configuration is stored in `pyproject.toml` under `[tool.bandit]`. The `tests/` 
 
 See `docs/spec/static-analysis.md` for justification and impact evaluation.
 
+### Code Complexity Analyzer – Radon
+
+[Radon](https://radon.readthedocs.io/) analyzes Python code complexity and maintainability. It helps identify overly complex functions that may be hard to maintain or prone to errors.
+
+---
+
+**Install:**
+```bash
+cd backend
+uv add --dev radon
+```
+
+Or without uv:
+```bash
+pip install radon
+```
+
+---
+
+**Run (from the `backend/` directory):**
+```bash
+# Cyclomatic Complexity (annotated + sorted hotspots) for application code
+uv run radon cc app/ -a -s
+
+# Maintainability Index (code maintainability per file)
+uv run radon mi app/
+
+# Full repository complexity scan (includes tests, scripts, configs, etc.)
+uv run radon cc . -a -s
+```
+
+---
+
+**Configuration (`pyproject.toml`):**
+```toml
+[tool.radon]
+cc_min = "B"
+show_complexity = true
+order = "SCORE"
+```
+
+- `cc_min = "B"` filters out low-complexity (A-level) functions
+- `show_complexity = true` displays numeric complexity scores
+- `order = "SCORE"` sorts results by highest complexity first
+
+---
+
+**Output interpretation:**
+- **A–B:** Good maintainability
+- **C:** Moderate complexity, review recommended
+- **D–F:** High complexity, refactoring strongly recommended
+
+---
+
+See `docs/spec/static-analysis.md` for justification, findings, and impact evaluation of Radon in the ESBot backend.
+
 ## Projektstruktur
 
 ```
