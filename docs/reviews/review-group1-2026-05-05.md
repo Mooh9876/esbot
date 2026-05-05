@@ -6,7 +6,7 @@
 **Date (planned / actual):** 2026-05-05 / 2026-05-05  
 **Moderator:** Mohammed Al-otaibi  
 **Author(s):** hse-st-group1  
-**Reviewers:** Mohammed Al-otaibi, Dominic Sehorz
+**Reviewers:** Mohammed Al-otaibi, Dominic Sehorz, Nils-Konstantin Lutz
 
 ---
 
@@ -71,8 +71,8 @@ No live meeting with Group 1 was possible since we're separate teams. Phases I c
 | Reviewer | Scope | Abbr. |
 |----------|-------|-------|
 | 1 | Mohammed Al-otaibi — REQ, SPEC, EB (completeness & consistency) | MA |
-| 2 | [Dominic Sehorz] — DM, CODE (model vs data-model, services) | — |
-| 3 | [Team member 3] — BDD, CODE (feature files, step definitions) | — |
+| 2 | Dominic Sehorz — DM, CODE (model vs data-model, services) | — |
+| 3 | Nils-Konstantin Lutz — BDD, CODE (feature files, step definitions) | — |
 
 ### 3.6 Kick-off
 
