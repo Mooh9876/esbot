@@ -290,3 +290,37 @@ The system must **not** crash, silently accept the event, or transition to any n
 | EXPIRED → – (request_quiz, invalid)   | TS-06         |
 | EXPIRED → – (submit_answer, invalid)  | TS-06         |
 | EXPIRED → – (resume_session, invalid) | TS-06         |
+
+---
+
+## 7.3 Reflection — Test Design Technique Comparison
+
+### Complementarity of the Techniques
+
+The three techniques focus on different kinds of problems and complement each other well.
+
+**Equivalence Class Partitioning (ECP) and Boundary Value Analysis (BVA)** are best for validating user input and API parameters. In the ESBot project, this was especially useful for the `QuizRequest` validation rules from FR3. For example, the `topic` field has strict length constraints (3–100 characters). Instead of testing every possible string length, ECP grouped the inputs into meaningful valid and invalid classes, while BVA focused on the critical edge values like 2, 3, 100, and 101 characters. This gives high coverage with relatively few tests.
+
+**Decision tables** are strongest when system behaviour depends on combinations of independent conditions. The answer evaluation feature from FR4 is a good example because the output depends on multiple factors at once: whether the answer is empty, whether the quiz item still exists, and whether the answer is correct, partially correct, or incorrect. A decision table makes these combinations explicit and helps prevent missing edge cases that are easy to overlook in informal testing.
+
+**State transition testing** is most useful when behaviour depends on history or lifecycle state. The `UserSession` lifecycle from FR6 and FR5 clearly falls into this category. A session behaves differently depending on whether it is `NEW`, `ACTIVE`, `IDLE`, or `EXPIRED`. State-based testing made it possible to verify both normal flows (e.g. resume after inactivity) and invalid transitions (e.g. submitting a message after expiration). This technique is especially valuable for backend systems that maintain persistent session context.
+
+---
+
+### Gaps and Alternative Techniques
+
+Even together, the three techniques do not cover every important ESBot behaviour equally well.
+
+One important gap is the quality and semantic correctness of AI-generated responses. For example, FR1 and FR4 involve natural-language explanations and feedback produced by the AI model. ECP, decision tables, and state transition testing can verify that a response exists and that the correct workflow is triggered, but they cannot determine whether the explanation is actually pedagogically useful, factually correct, or understandable for students.
+
+For this type of behaviour, **exploratory testing** and **scenario-based testing** would be more appropriate. Human reviewers can evaluate answer quality, clarity, tone, and educational usefulness in realistic learning situations. In addition, some aspects of ESBot would benefit from **performance and load testing**, especially session persistence and concurrent quiz generation under higher user load. Those non-functional aspects are outside the primary scope of the three techniques used in this exercise.
+
+---
+
+### Effort vs. Value
+
+For the ESBot project, **state transition testing** produced the highest defect-detection value relative to the design effort.
+
+The reason is that session handling affects almost every major feature in the system. Requirements such as FR5 and FR6 depend heavily on correct lifecycle management, and many realistic edge cases occur only because of state changes over time. Examples include users returning after inactivity, sessions expiring during a quiz, or interactions being submitted after termination. These kinds of defects are often difficult to detect with isolated input validation tests alone.
+
+Compared to ECP and decision tables, the state model required more initial effort to design, but it also uncovered a larger variety of realistic failure scenarios. In particular, the invalid transition analysis helped verify graceful error handling required by NFR3. Since session management is central to ESBot’s reliability and user experience, the value gained from state transition testing was especially high for this project.
