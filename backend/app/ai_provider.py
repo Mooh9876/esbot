@@ -162,3 +162,25 @@ class ChatService:
         if prompt.startswith(prefix):
             return prompt[len(prefix):].strip()
         return prompt.strip()
+    
+    def start_session(self, session):
+        """
+        Creates and persists a new learning session.
+        """
+        self._db.add(session)
+        self._db.commit()
+        return session
+    
+    def evaluate_answer(self, question: str, answer: str) -> str:
+        """
+        Sends answer to AI for evaluation and returns feedback.
+        """
+
+        prompt = f"Question: {question}\nAnswer: {answer}"
+
+        try:
+            feedback = self._ai.ask(prompt)
+        except AIProviderError:
+            return self.UNAVAILABLE_MSG
+        
+        return feedback
