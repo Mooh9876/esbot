@@ -30,7 +30,7 @@ class DummyUserSession:
         self.messages.append(msg)
 
     def add_quiz_request(self, qr):
-        self.quiz_requests.append(qr)
+        self.quiz_request.append(qr)
 
 # ------------------------------------------------------------------
 # Test: handle_question (message flow)
@@ -116,7 +116,7 @@ def test_handle_quiz_success():
     result = service.handle_quiz_request(session, "Generate a quiz about Python")
 
     assert isinstance(result, QuizResult)
-    assert len(session.quiz_requests) == 1
+    assert len(session.quiz_request) == 1
     assert db.committed is True
     ai.generate_quiz.assert_called_once_with("Python")
 
