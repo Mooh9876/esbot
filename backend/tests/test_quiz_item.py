@@ -133,8 +133,24 @@ class TestQuizItemHelpers:
 
 
 class TestQuizItemBoundaryValues:
-    # edge cases for question and correct_answer
-    # both fields only have a NOT NULL constraint, empty strings are fine from the DB's perspective
+    # Analysis for QuizItem model fields:
+    #
+    # question field
+    #   valid class:   any non-empty string (e.g. "What is Python?")
+    #   invalid class: None -> IntegrityError
+    #   boundary:      empty string "" -> accepted by DB (not NULL)
+    #
+    # correct_answer field
+    #   same structure as question
+    #   valid class:   any non-empty string
+    #   invalid class: None -> IntegrityError
+    #   boundary:      empty string "" -> accepted by DB (not NULL)
+    #
+    # submitted_answers relationship
+    #   boundary: 0 answers (default), 1 answer, many answers (n=3 tested)
+    #
+    # gap found: both fields have no minimum length or content check at DB level.
+    #            An empty question or answer passes without any error.
 
     def test_empty_question_accepted_by_db(self, db_session):
         session = UserSession()

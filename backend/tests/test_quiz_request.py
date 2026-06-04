@@ -127,8 +127,20 @@ class TestQuizRequestHelpers:
 
 
 class TestQuizRequestBoundaryValues:
-    # testing edge cases for topic and difficulty
-    # difficulty is a plain string column with no enum, so "super-hard" is accepted too
+    # Analysis for QuizRequest model fields:
+    #
+    # topic field
+    #   valid class:   any non-empty string (e.g. "Python")
+    #   invalid class: None -> IntegrityError
+    #   boundary:      empty string "" -> accepted by DB (not NULL)
+    #
+    # difficulty field
+    #   valid classes: "easy", "medium", "hard"
+    #   invalid class: None -> IntegrityError
+    #   boundary:      empty string "" -> accepted by DB (not NULL)
+    #   gap found:     difficulty is a plain string column, no Enum constraint.
+    #                  Any value like "super-hard" is accepted without error.
+    #                  The service layer would need to validate this.
 
     def test_empty_topic_accepted_by_db(self, db_session):
         session = UserSession()

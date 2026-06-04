@@ -119,9 +119,16 @@ class TestSubmittedAnswerHelpers:
 
 
 class TestSubmittedAnswerBoundaryValues:
-    # boundary values for the answer field
-    # empty string is technically allowed by the DB (it's not NULL)
-    # probably should be caught at the service level though
+    # Analysis for SubmittedAnswer model:
+    #
+    # answer field
+    #   valid class:   any non-empty string (e.g. "A programming language")
+    #   invalid class: None -> IntegrityError (NOT NULL)
+    #   boundary:      empty string "" -> accepted by DB (not NULL)
+    #   boundary:      very long string (5000 chars) -> no upper limit on String columns
+    #
+    # gap found: an empty answer string passes the DB constraint.
+    #            semantically it makes no sense - this should be caught in the service layer.
 
     def test_empty_answer_accepted_by_db(self, db_session):
         item = _create_quiz_item(db_session)

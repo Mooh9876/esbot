@@ -92,9 +92,21 @@ class TestMessageHelpers:
 
 
 class TestMessageBoundaryValues:
-    # boundary value tests for content and role
-    # role has no enum constraint at DB level - any string gets stored
-    # so validation would have to happen in the service layer
+    # Analysis for Message model fields:
+    #
+    # content field
+    #   valid class:   any non-empty string (e.g. "Hello")
+    #   invalid class: None -> IntegrityError (NOT NULL constraint)
+    #   boundary:      empty string "" -> accepted by DB (not NULL), but semantically wrong
+    #   boundary:      very long string -> no length limit on Text columns, so no upper bound
+    #
+    # role field
+    #   valid classes: "user", "bot"
+    #   invalid class: None -> IntegrityError
+    #   boundary:      empty string "" -> accepted (not NULL)
+    #   gap found:     role is a plain string column with no Enum constraint.
+    #                  Values like "admin" are stored without error.
+    #                  Validation needs to be done in the service layer.
 
     def test_empty_content_accepted_by_db(self, db_session):
         # empty string is not NULL, passes the NOT NULL check

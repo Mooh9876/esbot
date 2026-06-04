@@ -119,9 +119,21 @@ class TestEvaluationResultHelpers:
         assert answer.evaluation_result is ev
 
 class TestEvaluationResultBoundaryValues:
-    # boundary values for is_correct and feedback
-    # is_correct is NOT NULL so None fails, but True/False both work fine
-    # feedback is nullable, and empty string is also accepted (different from NULL)
+    # Analysis for EvaluationResult model fields:
+    #
+    # is_correct field (Boolean, NOT NULL)
+    #   valid class:   True, False
+    #   invalid class: None -> IntegrityError
+    #   note: no partial/unknown state possible - it's strictly binary
+    #
+    # feedback field (Text, nullable)
+    #   valid class:   any non-empty string
+    #   valid class:   None (nullable column, no constraint)
+    #   boundary:      empty string "" -> accepted (different from NULL)
+    #   boundary:      very long string (5000 chars) -> no length limit on Text
+    #
+    # gap found: is_correct only supports True/False - there's no way to express
+    #            "partially correct" at the model level.
 
     def test_empty_feedback_string_accepted(self, db_session):
         answer = _create_submitted_answer(db_session)
