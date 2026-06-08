@@ -105,4 +105,56 @@ This should not happen given that commands are identical and the database is in-
 
 ## Exercise 9.2 Enhancements
 
-*(To be added in Exercise 9.2)*
+### What was added: Python version matrix
+
+The `test` job now uses a GitHub Actions **matrix strategy** to run the full test suite (pytest + Bandit) in parallel on three Python interpreter versions:
+
+```yaml
+strategy:
+  matrix:
+    python-version: ["3.10", "3.11", "3.12"]
+```
+
+All steps that previously referenced `"3.11"` now use `${{ matrix.python-version }}`. The dependency cache key was extended with the Python version (`${{ runner.os }}-${{ matrix.python-version }}-uv-...`) so that each version maintains its own isolated cache and there is no cross-version cache pollution.
+
+---
+
+### Why it fits ESBot
+
+`pyproject.toml` declares `requires-python = ">=3.11"`, which means the package is intended to support any Python 3.11 or newer. The matrix validates this claim concretely:
+
+- **3.10** — verifies that a user on the previous LTS release gets a clear failure message rather than a silent runtime error (expected to fail if 3.10-only syntax is used, which is caught early).
+- **3.11** — the current baseline; matches the original CI and local development environment.
+- **3.12** — verifies forward compatibility with the latest stable release, catching deprecations in the standard library or third-party packages before they silently break for users on newer interpreters.
+
+Without the matrix, a syntax change or a dependency that drops support for an older version would only be discovered when a user reports a runtime crash — not in CI.
+
+---
+
+### Added value vs. cost
+
+| Dimension | Assessment |
+|---|---|
+| **Security** | No direct impact; Bandit still runs on each matrix leg, so any security finding is caught on all three versions. |
+| **Speed** | Three parallel jobs instead of one. Wall-clock time stays roughly the same as the slowest single job; GitHub Actions runs matrix legs concurrently on free-tier ubuntu-latest runners. Total runner-minutes consumed rises 3×, which is acceptable given the current short job duration (~1–2 min per leg). |
+| **Maintenance** | Near-zero. Adding a new Python version later is a single-line change. Removing end-of-life versions (e.g., dropping 3.10 when it reaches EOL) is equally trivial. |
+| **False positives** | Very low. Failures on a specific Python version indicate a real compatibility issue, not a flaky environment. |
+
+---
+
+### Local vs. CI parity
+
+Locally, developers run pytest and Bandit against whichever Python version their `uv` virtual environment uses (typically 3.11 or 3.12). The CI matrix covers the versions that are not actively used day-to-day locally, which is exactly its purpose.
+
+| Local command | CI equivalent |
+|---|---|
+| `uv run pytest` | `uv run pytest` on **3.10**, **3.11**, **3.12** |
+| `uv run bandit -r app/` | `uv run bandit -r app/` on **3.10**, **3.11**, **3.12** |
+
+To reproduce a specific matrix leg locally, switch the Python interpreter explicitly:
+
+```bash
+uv python pin 3.10
+uv sync --all-groups
+uv run pytest
+```
