@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from sqlalchemy import text
 
 from app.database import engine
+from app.routes.sessions import router as sessions_router
 
 
 @asynccontextmanager
@@ -25,6 +26,8 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+app.include_router(sessions_router)
 
 
 @app.get("/health", tags=["system"])
