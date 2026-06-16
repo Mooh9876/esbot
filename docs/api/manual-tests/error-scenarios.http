@@ -1,0 +1,161 @@
+### ESBot API – Error Scenarios
+### Tool: curl (VS Code REST Client format)
+### Base URL: http://localhost:8000
+### Date: 2026-06-16
+
+# ─────────────────────────────────────────────
+# ERROR 1 – GET non-existent session → 404 Not Found
+# ─────────────────────────────────────────────
+# Scenario: Requesting a session ID that does not exist in the database.
+#
+# Request:
+#   GET /sessions/9999 HTTP/1.1
+#   Host: localhost:8000
+#
+# Response:
+#   HTTP/1.1 404 Not Found
+#   Content-Type: application/json
+#
+#   {"detail":"Session nicht gefunden"}
+#
+# Verdict: ✅ Expected 404 – received 404
+
+GET http://localhost:8000/sessions/9999
+
+###
+
+# ─────────────────────────────────────────────
+# ERROR 2 – POST message with whitespace-only content → 422 Unprocessable Entity
+# ─────────────────────────────────────────────
+# Scenario: Sending a message whose content consists only of whitespace.
+#           The Pydantic validator strips and rejects it.
+#
+# Request:
+#   POST /sessions/1/messages HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {"content": "   "}
+#
+# Response:
+#   HTTP/1.1 422 Unprocessable Entity
+#   Content-Type: application/json
+#
+#   {
+#     "detail": [
+#       {
+#         "type": "value_error",
+#         "loc": ["body", "content"],
+#         "msg": "Value error, Nachricht darf nicht leer sein",
+#         "input": "   ",
+#         "ctx": {"error": {}}
+#       }
+#     ]
+#   }
+#
+# Verdict: ✅ Expected 422 – received 422
+
+POST http://localhost:8000/sessions/1/messages
+Content-Type: application/json
+
+{
+  "content": "   "
+}
+
+###
+
+# ─────────────────────────────────────────────
+# ERROR 3 – POST message with missing content field → 422 Unprocessable Entity
+# ─────────────────────────────────────────────
+# Scenario: Sending a request body that is completely missing the required
+#           "content" field.
+#
+# Request:
+#   POST /sessions/1/messages HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {}
+#
+# Response:
+#   HTTP/1.1 422 Unprocessable Entity
+#   Content-Type: application/json
+#
+#   {
+#     "detail": [
+#       {
+#         "type": "missing",
+#         "loc": ["body", "content"],
+#         "msg": "Field required",
+#         "input": {}
+#       }
+#     ]
+#   }
+#
+# Verdict: ✅ Expected 422 – received 422
+
+POST http://localhost:8000/sessions/1/messages
+Content-Type: application/json
+
+{}
+
+###
+
+# ─────────────────────────────────────────────
+# ERROR 4 – Submit answer to non-existent question → 404 Not Found
+# ─────────────────────────────────────────────
+# Scenario: Submitting an answer for a quiz question ID that does not exist.
+#
+# Request:
+#   POST /sessions/1/quiz/9999/answer HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {"answer": "test"}
+#
+# Response:
+#   HTTP/1.1 404 Not Found
+#   Content-Type: application/json
+#
+#   {"detail":"Frage nicht gefunden"}
+#
+# Verdict: ✅ Expected 404 – received 404
+
+POST http://localhost:8000/sessions/1/quiz/9999/answer
+Content-Type: application/json
+
+{
+  "answer": "test"
+}
+
+###
+
+# ─────────────────────────────────────────────
+# ERROR 5 – POST message to deleted/non-existent session → 404 Not Found
+# ─────────────────────────────────────────────
+# Scenario: Sending a message to a session that was already deleted (or never
+#           existed). Simulates interaction after session cleanup.
+#
+# Request:
+#   POST /sessions/9999/messages HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {"content": "hallo"}
+#
+# Response:
+#   HTTP/1.1 404 Not Found
+#   Content-Type: application/json
+#
+#   {"detail":"Session nicht gefunden"}
+#
+# Verdict: ✅ Expected 404 – received 404
+
+POST http://localhost:8000/sessions/9999/messages
+Content-Type: application/json
+
+{
+  "content": "hallo"
+}
+
+###

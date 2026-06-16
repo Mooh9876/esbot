@@ -1,0 +1,200 @@
+### ESBot API – Happy-Path Workflow
+### Tool: curl (VS Code REST Client format)
+### Base URL: http://localhost:8000
+### Date: 2026-06-16
+### LLM Provider: StubAIProvider (deterministic mock)
+### Database: SQLite (sqlite:////tmp/esbot_run.db)
+
+# ─────────────────────────────────────────────
+# STEP 1 – Health Check
+# ─────────────────────────────────────────────
+# Request:
+#   GET /health HTTP/1.1
+#   Host: localhost:8000
+#
+# Response:
+#   HTTP/1.1 200 OK
+#   Content-Type: application/json
+#
+#   {"status":"ok","service":"esbot-backend"}
+
+GET http://localhost:8000/health
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 2 – Create Session
+# ─────────────────────────────────────────────
+# Request:
+#   POST /sessions HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+# Response:
+#   HTTP/1.1 201 Created
+#   Content-Type: application/json
+#
+#   {"id":1,"created_at":"2026-06-16T20:33:36.985380"}
+
+POST http://localhost:8000/sessions
+Content-Type: application/json
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 3 – List All Sessions
+# ─────────────────────────────────────────────
+# Request:
+#   GET /sessions HTTP/1.1
+#   Host: localhost:8000
+#
+# Response:
+#   HTTP/1.1 200 OK
+#   Content-Type: application/json
+#
+#   [{"id":1,"created_at":"2026-06-16T20:33:36.985380"}]
+
+GET http://localhost:8000/sessions
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 4 – Get Session by ID
+# ─────────────────────────────────────────────
+# Request:
+#   GET /sessions/1 HTTP/1.1
+#   Host: localhost:8000
+#
+# Response:
+#   HTTP/1.1 200 OK
+#   Content-Type: application/json
+#
+#   {"id":1,"created_at":"2026-06-16T20:33:36.985380"}
+
+GET http://localhost:8000/sessions/1
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 5 – Send a Chat Message
+# ─────────────────────────────────────────────
+# Request:
+#   POST /sessions/1/messages HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {"content": "Was ist Software Testing?"}
+#
+# Response:
+#   HTTP/1.1 201 Created
+#   Content-Type: application/json
+#
+#   {
+#     "id": 2,
+#     "content": "[STUB] This is a deterministic answer for: Was ist Software Testing?",
+#     "role": "bot",
+#     "created_at": "2026-06-16T20:33:49.571360"
+#   }
+
+POST http://localhost:8000/sessions/1/messages
+Content-Type: application/json
+
+{
+  "content": "Was ist Software Testing?"
+}
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 6 – Get Message History
+# ─────────────────────────────────────────────
+# Request:
+#   GET /sessions/1/messages HTTP/1.1
+#   Host: localhost:8000
+#
+# Response:
+#   HTTP/1.1 200 OK
+#   Content-Type: application/json
+#
+#   [
+#     {"id":1,"content":"Was ist Software Testing?","role":"user","created_at":"2026-06-16T20:33:49.570849"},
+#     {"id":2,"content":"[STUB] This is a deterministic answer for: Was ist Software Testing?","role":"bot","created_at":"2026-06-16T20:33:49.571360"}
+#   ]
+
+GET http://localhost:8000/sessions/1/messages
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 7 – Generate Quiz
+# ─────────────────────────────────────────────
+# Request:
+#   POST /sessions/1/quiz HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {"topic": "Äquivalenzklassenbildung"}
+#
+# Response:
+#   HTTP/1.1 201 Created
+#   Content-Type: application/json
+#
+#   {
+#     "quiz_request_id": 1,
+#     "topic": "Äquivalenzklassenbildung",
+#     "items": [
+#       {"id":1,"question":"What is the main concept of Äquivalenzklassenbildung?","correct_answer":"42"},
+#       {"id":2,"question":"Name one key fact about Äquivalenzklassenbildung.","correct_answer":"stub answer"}
+#     ]
+#   }
+
+POST http://localhost:8000/sessions/1/quiz
+Content-Type: application/json
+
+{
+  "topic": "Äquivalenzklassenbildung"
+}
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 8 – Submit Correct Answer
+# ─────────────────────────────────────────────
+# Request:
+#   POST /sessions/1/quiz/1/answer HTTP/1.1
+#   Host: localhost:8000
+#   Content-Type: application/json
+#
+#   {"answer": "42"}
+#
+# Response:
+#   HTTP/1.1 201 Created
+#   Content-Type: application/json
+#
+#   {
+#     "submitted_answer_id": 1,
+#     "feedback": "[STUB] This is a deterministic answer for: Question: What is the main concept of Äquivalenzklassenbildung?\nAnswer: 42"
+#   }
+
+POST http://localhost:8000/sessions/1/quiz/1/answer
+Content-Type: application/json
+
+{
+  "answer": "42"
+}
+
+###
+
+# ─────────────────────────────────────────────
+# STEP 9 – Delete Session (cleanup)
+# ─────────────────────────────────────────────
+# Request:
+#   DELETE /sessions/1 HTTP/1.1
+#   Host: localhost:8000
+#
+# Response:
+#   HTTP/1.1 204 No Content
+
+DELETE http://localhost:8000/sessions/1
+
+###
