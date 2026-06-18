@@ -115,3 +115,12 @@ The mock LLM provider was used so that chat and quiz responses were deterministi
 ## Conclusion
 
 The manual API tests were successful. The ESBot backend handled the complete happy-path workflow correctly and returned meaningful error responses for invalid requests. The API is suitable for further automated and performance testing in the next exercise steps.
+
+## Use of Artificial Intelligence
+
+For this assignment, I used only **ChatGPT with the GPT-5.5 Thinking model** as AI support.
+I mainly used the AI to receive suggestions for improving and structuring the manual API tests. This included suggestions for a complete **happy-path workflow** and suitable **error and negative test scenarios**.
+I performed the actual API tests myself. I started the backend, executed the requests with the VS Code REST Client, checked the returned status codes and response bodies, and created the screenshots myself.
+I also used ChatGPT to review my test cases, screenshot names, and written summary for completeness and clarity. The AI was therefore used as a support tool for suggestions, improvements, and verification. The execution, evaluation, and documentation of the test results were completed by me.
+
+
