@@ -53,3 +53,15 @@ cd backend && uv run pytest -v
 | `TestEmptyMessagesBeforeAnySent` | GET messages vor dem Senden gibt 200 mit leerer Liste zurueck |
 | `TestDeleteSession` | DELETE gibt 204 zurueck; nachfolgende Nachricht an geloeschte Session gibt 404 |
 | `TestEmptyAnswer` | Leere Antwort bei Quiz-Bewertung gibt 422 zurueck |
+
+---
+
+## Use of Artificial Intelligence
+
+For this assignment, I used **Claude Sonnet 4.6** as AI support only.
+The AI was not used to write the test code itself but was used in a supportive role at two specific points:
+
+1. **Endpoint coverage check** — I provided the AI with my test file and the API reference to verify that all API endpoints were covered by the automated tests.
+2. **Pre-run error review** — Before executing the test suite, I asked the AI to review the test code for potential errors, inconsistencies, or missing assertions.
+
+The actual test implementation, execution, and evaluation of the results were completed entirely by me.
