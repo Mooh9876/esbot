@@ -1,0 +1,195 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #1f2937;
+  background: #f4f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0;
+}
+
+.header p {
+  margin: 6px 0 0;
+  color: #64748b;
+}
+
+.health-status {
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  padding: 8px 12px;
+  font-weight: 700;
+}
+
+.error-banner {
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 20px;
+}
+
+.sidebar,
+.chat-panel,
+.quiz-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+}
+
+.sidebar h2,
+.chat-panel h2,
+.quiz-panel h2 {
+  margin-top: 0;
+}
+
+.content {
+  display: grid;
+  gap: 20px;
+}
+
+.primary-button {
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: white;
+  padding: 10px 14px;
+  font-weight: 700;
+}
+
+.primary-button:hover {
+  background: #1d4ed8;
+}
+
+.session-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.session-item {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.session-item.active {
+  border-color: #2563eb;
+  background: #dbeafe;
+}
+
+.message-list {
+  min-height: 260px;
+  max-height: 380px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.message {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.user-message {
+  background: #dbeafe;
+}
+
+.assistant-message {
+  background: #e2e8f0;
+}
+
+.message-form,
+.quiz-panel,
+.quiz-card {
+  display: grid;
+  gap: 10px;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.quiz-card {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.quiz-question {
+  font-weight: 700;
+}
+
+.quiz-feedback {
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 8px;
+  background: #dcfce7;
+  color: #166534;
+}
+
+.muted-text {
+  color: #64748b;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

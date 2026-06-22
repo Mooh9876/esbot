@@ -71,3 +71,10 @@ __pycache__/
 backend/.env
 .vscode/settings.json
 .coverage
+
+
+# Local development files
+backend/esbot_ui.db
+backend/.venv/
+frontend/node_modules/
+.devcontainer/devcontainer-lock.json
