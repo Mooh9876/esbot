@@ -78,3 +78,8 @@ backend/esbot_ui.db
 backend/.venv/
 frontend/node_modules/
 .devcontainer/devcontainer-lock.json
+
+
+# E2E Tests, SQL In Memory configs
+esbot.db
+trace.zip
