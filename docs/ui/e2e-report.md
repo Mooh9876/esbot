@@ -71,9 +71,11 @@ Overall, the test suite demonstrated stable and repeatable behavior across all e
 
 ## Reflection
 
-**WHAT WAS EASY?** (PLATZHALTER)
+**WHAT WAS EASY?**
+Setting up Playwright and writing the tests was straightforward. The frontend already contained all required `data-testid` attributes (`new-session-btn`, `message-input`, `send-message-btn`, `error-banner`, ...), so no changes to `App.jsx` were needed. Playwright's `getByTestId()` API mapped directly to these selectors without any additional configuration. The `StubAIProvider` on the backend ensured fully deterministic responses, which made assertions reliable and simple to write. Playwright's built-in auto-waiting eliminated the need to manually handle React's asynchronous state updates.
 
-**WHAT WAS DIFFICULT OR SURPRISING?** (PLATZHALTER)
+**WHAT WAS DIFFICULT OR SURPRISING?**
+The main difficulty was ensuring the correct working directory when running the tests: the `npm run test:e2e:playwright` command must be executed from the `frontend/` folder, not the project root, since that is where `package.json` is located. Running it from the project root caused an `ENOENT` error. Another minor challenge was the test isolation for session state: each test creates a new session independently, which works correctly but means the session list grows with every test run against a persistent database. With SQLite this is harmless, but it would need to be addressed in a production-like setup.
 
 In terms of the test pyramid:
 - **Unit tests** would catch logic errors in individual frontend or backend components (e.g., validation logic or API handlers).
